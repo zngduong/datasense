@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nền tảng kết nối API giúp liên kết và đồng bộ dữ liệu giữa nhiều dịch vụ một cách dễ dàng">
+    <title>DataSense - Kết nối API thông minh</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
+                    <path d="M16 8L24 16L16 24L8 16L16 8Z" fill="white"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#667eea"/>
+                            <stop offset="100%" stop-color="#764ba2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>DataSense</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Tính năng</a></li>
+                <li><a href="#how-it-works">Cách hoạt động</a></li>
+                <li><a href="#pricing">Giá cả</a></li>
+                <li><a href="#contact" class="btn-primary">Bắt đầu</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Kết nối mọi dịch vụ<br>
+                    <span class="gradient-text">với API thông minh</span>
+                </h1>
+                <p class="hero-description">
+                    DataSense giúp bạn dễ dàng truyền nhận và đồng bộ dữ liệu giữa các ứng dụng,
+                    dịch vụ và hệ thống khác nhau chỉ với vài bước đơn giản.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary btn-large">Dùng thử miễn phí</a>
+                    <a href="#how-it-works" class="btn btn-secondary btn-large">Tìm hiểu thêm</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">10M+</div>
+                        <div class="stat-label">API Calls/ngày</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Dịch vụ tích hợp</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">99.9%</div>
+                        <div class="stat-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <div class="card-icon">📊</div>
+                    <div class="card-text">Analytics API</div>
+                </div>
+                <div class="floating-card card-2">
+                    <div class="card-icon">💳</div>
+                    <div class="card-text">Payment API</div>
+                </div>
+                <div class="floating-card card-3">
+                    <div class="card-icon">📧</div>
+                    <div class="card-text">Email API</div>
+                </div>
+                <div class="connection-line line-1"></div>
+                <div class="connection-line line-2"></div>
+                <div class="connection-line line-3"></div>
+                <div class="center-hub">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                        <circle cx="40" cy="40" r="40" fill="url(#hubGradient)"/>
+                        <path d="M40 20L55 35L40 50L25 35L40 20Z" fill="white"/>
+                        <path d="M40 30L60 40L40 50L20 40L40 30Z" fill="white" opacity="0.7"/>
+                        <defs>
+                            <linearGradient id="hubGradient" x1="0" y1="0" x2="80" y2="80">
+                                <stop offset="0%" stop-color="#667eea"/>
+                                <stop offset="100%" stop-color="#764ba2"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Tính năng nổi bật</h2>
+            <p class="section-description">
+                Mọi thứ bạn cần để kết nối và quản lý API một cách hiệu quả
+            </p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Tích hợp nhanh chóng</h3>
+                    <p>Kết nối với hàng trăm dịch vụ chỉ trong vài phút. Không cần code phức tạp.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Đồng bộ real-time</h3>
+                    <p>Dữ liệu được cập nhật và đồng bộ tự động giữa các hệ thống theo thời gian thực.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Bảo mật cao</h3>
+                    <p>Mã hóa end-to-end, xác thực OAuth 2.0 và tuân thủ các tiêu chuẩn bảo mật quốc tế.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Giám sát & phân tích</h3>
+                    <p>Dashboard trực quan giúp theo dõi hiệu suất, lỗi và usage của API.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Hiệu năng cao</h3>
+                    <p>Xử lý hàng triệu requests mỗi ngày với độ trễ thấp và tốc độ cao.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛠️</div>
+                    <h3>Dễ dàng tùy chỉnh</h3>
+                    <p>API linh hoạt, webhooks và workflow automation cho mọi nhu cầu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">Cách hoạt động</h2>
+            <p class="section-description">
+                Bắt đầu kết nối API chỉ với 3 bước đơn giản
+            </p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Chọn dịch vụ</h3>
+                        <p>Chọn các dịch vụ và ứng dụng bạn muốn kết nối từ thư viện tích hợp sẵn.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Cấu hình kết nối</h3>
+                        <p>Thiết lập các mapping dữ liệu và quy tắc đồng bộ theo nhu cầu của bạn.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Kích hoạt & theo dõi</h3>
+                        <p>Bật kết nối và theo dõi dữ liệu được đồng bộ tự động qua dashboard.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title">Gói dịch vụ</h2>
+            <p class="section-description">
+                Chọn gói phù hợp với nhu cầu của bạn
+            </p>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">
+                        <span class="currency">₫</span>
+                        <span class="amount">0</span>
+                        <span class="period">/tháng</span>
+                    </div>
+                    <ul class="features-list">
+                        <li>✓ 1,000 API calls/tháng</li>
+                        <li>✓ 3 kết nối</li>
+                        <li>✓ Hỗ trợ cơ bản</li>
+                        <li>✓ Dashboard cơ bản</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-secondary">Bắt đầu miễn phí</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="badge">Phổ biến nhất</div>
+                    <h3>Professional</h3>
+                    <div class="price">
+                        <span class="currency">₫</span>
+                        <span class="amount">299,000</span>
+                        <span class="period">/tháng</span>
+                    </div>
+                    <ul class="features-list">
+                        <li>✓ 100,000 API calls/tháng</li>
+                        <li>✓ Không giới hạn kết nối</li>
+                        <li>✓ Hỗ trợ ưu tiên</li>
+                        <li>✓ Dashboard nâng cao</li>
+                        <li>✓ Webhooks & automation</li>
+                        <li>✓ Custom integrations</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary">Chọn gói này</a>
+                </div>
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">
+                        <span class="amount">Liên hệ</span>
+                    </div>
+                    <ul class="features-list">
+                        <li>✓ Không giới hạn API calls</li>
+                        <li>✓ Không giới hạn kết nối</li>
+                        <li>✓ Hỗ trợ 24/7</li>
+                        <li>✓ SLA 99.9%</li>
+                        <li>✓ Dedicated infrastructure</li>
+                        <li>✓ Custom development</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-secondary">Liên hệ ngay</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="cta">
+        <div class="container">
+            <h2>Sẵn sàng bắt đầu?</h2>
+            <p>Tham gia hàng nghìn doanh nghiệp đang sử dụng DataSense để kết nối dữ liệu</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary btn-large">Dùng thử miễn phí</a>
+                <a href="#" class="btn btn-white btn-large">Đặt lịch demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <rect width="32" height="32" rx="8" fill="url(#footerGradient)"/>
+                            <path d="M16 8L24 16L16 24L8 16L16 8Z" fill="white"/>
+                            <defs>
+                                <linearGradient id="footerGradient" x1="0" y1="0" x2="32" y2="32">
+                                    <stop offset="0%" stop-color="#667eea"/>
+                                    <stop offset="100%" stop-color="#764ba2"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>DataSense</span>
+                    </div>
+                    <p>Nền tảng kết nối API thông minh cho doanh nghiệp hiện đại</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Sản phẩm</h4>
+                    <ul>
+                        <li><a href="#features">Tính năng</a></li>
+                        <li><a href="#pricing">Giá cả</a></li>
+                        <li><a href="#">Tài liệu</a></li>
+                        <li><a href="#">API Reference</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Công ty</h4>
+                    <ul>
+                        <li><a href="#">Về chúng tôi</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Hỗ trợ</h4>
+                    <ul>
+                        <li><a href="#">Trung tâm trợ giúp</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Status</a></li>
+                        <li><a href="#">Điều khoản</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 DataSense. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#">Twitter</a>
+                    <a href="#">GitHub</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
