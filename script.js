@@ -1,3 +1,36 @@
+// Mobile Menu Toggle
+const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+
+        // Animate hamburger menu
+        const spans = mobileMenuToggle.querySelectorAll('span');
+        if (navLinks.classList.contains('active')) {
+            spans[0].style.transform = 'rotate(45deg) translateY(8px)';
+            spans[1].style.opacity = '0';
+            spans[2].style.transform = 'rotate(-45deg) translateY(-8px)';
+        } else {
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+        }
+    });
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            const spans = mobileMenuToggle.querySelectorAll('span');
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+        });
+    });
+}
+
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -19,10 +52,10 @@ const header = document.querySelector('header');
 window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
 
-    if (currentScroll > 100) {
-        header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+    if (currentScroll > 50) {
+        header.classList.add('scrolled');
     } else {
-        header.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+        header.classList.remove('scrolled');
     }
 
     lastScroll = currentScroll;
@@ -111,7 +144,7 @@ if (heroStats) {
 
 // Add active state to navigation on scroll
 const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
+const navLinksAll = document.querySelectorAll('.nav-link');
 
 window.addEventListener('scroll', () => {
     let current = '';
@@ -124,10 +157,67 @@ window.addEventListener('scroll', () => {
         }
     });
 
-    navLinks.forEach(link => {
-        link.style.color = '';
+    navLinksAll.forEach(link => {
+        link.classList.remove('active');
         if (link.getAttribute('href') === `#${current}`) {
-            link.style.color = 'var(--primary-color)';
+            link.classList.add('active');
         }
     });
+});
+
+// Interactive floating cards
+document.addEventListener('DOMContentLoaded', () => {
+    const floatingCards = document.querySelectorAll('.floating-card');
+
+    floatingCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            // Pause animation on hover
+            card.style.animationPlayState = 'paused';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            // Resume animation
+            card.style.animationPlayState = 'running';
+        });
+
+        // Add subtle tilt effect on mouse move
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+
+    // Parallax effect for hero visual
+    const heroVisual = document.querySelector('.hero-visual');
+    if (heroVisual && window.innerWidth > 768) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = scrolled * 0.3;
+            heroVisual.style.transform = `translateY(${parallax}px)`;
+        });
+    }
+
+    // Add glowing effect to center hub on scroll
+    const centerHub = document.querySelector('.center-hub');
+    if (centerHub) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const maxScroll = 500;
+            const glowIntensity = Math.min(scrolled / maxScroll, 1);
+            centerHub.style.filter = `drop-shadow(0 0 ${20 + glowIntensity * 30}px rgba(102, 126, 234, ${0.3 + glowIntensity * 0.4}))`;
+        });
+    }
 });
