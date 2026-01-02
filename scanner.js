@@ -239,6 +239,7 @@ function processAnimatedQR(text, result) {
     // If we detect a new sequence (different total), reset
     if (animatedQRTotal !== 0 && animatedQRTotal !== total) {
         console.log('New animated sequence detected, resetting...');
+        showNotification(`Sequence mới phát hiện (${total} frames). Reset...`, 'info');
         resetAnimatedQR();
     }
 
@@ -246,10 +247,12 @@ function processAnimatedQR(text, result) {
     if (animatedQRTotal === 0) {
         animatedQRTotal = total;
         showAnimatedQRProgress();
+        console.log(`Started collecting animated QR: ${total} frames expected`);
     }
 
-    // Store this part if not already stored
+    // Store this part (allow re-scanning to update if needed)
     if (!animatedQRParts[index]) {
+        // New frame collected
         animatedQRParts[index] = data;
 
         // Flash effect for each new part
@@ -262,12 +265,26 @@ function processAnimatedQR(text, result) {
         // Update progress
         updateAnimatedQRProgress();
 
-        console.log(`Animated QR: Got part ${index}/${total} (${Object.keys(animatedQRParts).length} collected)`);
+        const collected = Object.keys(animatedQRParts).length;
+        console.log(`✓ Frame ${index}/${total} collected (${collected}/${total} total)`);
+
+        // Show notification for frame collected
+        showNotification(`✓ Frame ${index}/${total}`, 'success');
 
         // Check if we have all parts
-        if (Object.keys(animatedQRParts).length === total) {
+        if (collected === total) {
             assembleAnimatedQR();
+        } else {
+            // Show which frames are still missing
+            const missing = [];
+            for (let i = 1; i <= total; i++) {
+                if (!animatedQRParts[i]) missing.push(i);
+            }
+            console.log(`Missing frames: [${missing.join(', ')}]`);
         }
+    } else {
+        // Frame already collected - just acknowledge
+        console.log(`Frame ${index}/${total} already collected (skipping)`);
     }
 }
 
@@ -303,8 +320,38 @@ function showAnimatedQRProgress() {
             <div class="progress-text">
                 <span id="animatedQRProgressText">0/${animatedQRTotal}</span>
             </div>
+            <div class="frames-grid" id="framesGrid"></div>
+            <div class="missing-frames" id="missingFrames" style="display: none;">
+                <small>Frame còn thiếu: <span id="missingFramesList"></span></small>
+            </div>
         `;
         scannerBox.appendChild(progressContainer);
+
+        // Create frame indicators
+        createFrameIndicators();
+    }
+}
+
+// Create individual frame indicators
+function createFrameIndicators() {
+    const framesGrid = document.getElementById('framesGrid');
+    if (!framesGrid) return;
+
+    framesGrid.innerHTML = '';
+
+    for (let i = 1; i <= animatedQRTotal; i++) {
+        const frameBox = document.createElement('div');
+        frameBox.className = 'frame-box';
+        frameBox.id = `frame-${i}`;
+        frameBox.innerHTML = `
+            <div class="frame-number">${i}</div>
+            <div class="frame-status">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <circle cx="12" cy="12" r="10"></circle>
+                </svg>
+            </div>
+        `;
+        framesGrid.appendChild(frameBox);
     }
 }
 
@@ -319,6 +366,57 @@ function updateAnimatedQRProgress() {
 
         const percentage = (collected / animatedQRTotal) * 100;
         progressFill.style.width = `${percentage}%`;
+    }
+
+    // Update individual frame indicators
+    for (let i = 1; i <= animatedQRTotal; i++) {
+        const frameBox = document.getElementById(`frame-${i}`);
+        if (frameBox) {
+            if (animatedQRParts[i]) {
+                // Frame collected - show checkmark
+                frameBox.classList.add('collected');
+                frameBox.classList.remove('missing');
+                frameBox.querySelector('.frame-status').innerHTML = `
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                `;
+            } else {
+                // Frame missing - show X or circle
+                frameBox.classList.add('missing');
+                frameBox.classList.remove('collected');
+                frameBox.querySelector('.frame-status').innerHTML = `
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <circle cx="12" cy="12" r="10"></circle>
+                    </svg>
+                `;
+            }
+        }
+    }
+
+    // Update missing frames list
+    updateMissingFramesList();
+}
+
+// Update list of missing frames
+function updateMissingFramesList() {
+    const missingFramesDiv = document.getElementById('missingFrames');
+    const missingFramesList = document.getElementById('missingFramesList');
+
+    if (!missingFramesDiv || !missingFramesList) return;
+
+    const missing = [];
+    for (let i = 1; i <= animatedQRTotal; i++) {
+        if (!animatedQRParts[i]) {
+            missing.push(i);
+        }
+    }
+
+    if (missing.length > 0) {
+        missingFramesDiv.style.display = 'block';
+        missingFramesList.textContent = missing.join(', ');
+    } else {
+        missingFramesDiv.style.display = 'none';
     }
 }
 

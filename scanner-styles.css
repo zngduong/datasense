@@ -622,6 +622,93 @@
     font-size: 14px;
     font-weight: 600;
     color: var(--text-dark);
+    margin-bottom: 12px;
+}
+
+/* Frame Indicators Grid */
+.frames-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.frame-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 8px;
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    transition: all 0.3s ease;
+}
+
+.frame-box.collected {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: #10b981;
+    animation: frameCollected 0.5s ease;
+}
+
+.frame-box.missing {
+    background: rgba(239, 68, 68, 0.05);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+@keyframes frameCollected {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.frame-number {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.frame-status {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.frame-box.collected .frame-status svg {
+    stroke: #10b981;
+}
+
+.frame-box.missing .frame-status svg {
+    stroke: #ef4444;
+    opacity: 0.5;
+}
+
+/* Missing Frames Alert */
+.missing-frames {
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid #ef4444;
+}
+
+.missing-frames small {
+    font-size: 12px;
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.missing-frames span {
+    font-weight: 700;
+    color: #b91c1c;
 }
 
 /* Animated QR Result Badge */
@@ -657,6 +744,21 @@
         right: 12px;
         transform: none;
         min-width: auto;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .frames-grid {
+        grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+        gap: 6px;
+    }
+
+    .frame-box {
+        padding: 6px;
+    }
+
+    .frame-number {
+        font-size: 11px;
     }
 
     @keyframes slideUp {
