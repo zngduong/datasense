@@ -3,6 +3,13 @@ let html5QrcodeScanner = null;
 let isScanning = false;
 let scannedResults = [];
 
+// Animated QR Code tracking
+let animatedQRParts = {};      // Store parts: {index: data}
+let animatedQRTotal = 0;       // Total parts expected
+let animatedQRMetadata = null; // Metadata from first frame
+let lastScannedCode = '';      // Prevent duplicate scans
+let lastScanTime = 0;          // Debounce scanning
+
 // DOM Elements
 const startButton = document.getElementById('startButton');
 const stopButton = document.getElementById('stopButton');
@@ -172,20 +179,197 @@ function resetButtons() {
 
 // Handle successful scan
 function onScanSuccess(decodedText, decodedResult) {
-    // Add success flash effect
-    scannerBox.classList.add('success');
-    setTimeout(() => scannerBox.classList.remove('success'), 500);
-
-    // Play success sound (optional)
-    playSuccessSound();
-
-    // Add to results
-    addResult(decodedText, decodedResult.result.format.formatName);
-
-    // Vibrate if supported
-    if (navigator.vibrate) {
-        navigator.vibrate(200);
+    // Debounce - prevent scanning same code too quickly
+    const now = Date.now();
+    if (decodedText === lastScannedCode && (now - lastScanTime) < 1000) {
+        return; // Skip duplicate within 1 second
     }
+    lastScannedCode = decodedText;
+    lastScanTime = now;
+
+    // Check if this is an animated QR code (format: index/total|data)
+    if (isAnimatedQRCode(decodedText)) {
+        processAnimatedQR(decodedText, decodedResult);
+    } else {
+        // Regular single QR code
+        // Add success flash effect
+        scannerBox.classList.add('success');
+        setTimeout(() => scannerBox.classList.remove('success'), 500);
+
+        // Play success sound
+        playSuccessSound();
+
+        // Add to results
+        addResult(decodedText, decodedResult.result.format.formatName);
+
+        // Vibrate if supported
+        if (navigator.vibrate) {
+            navigator.vibrate(200);
+        }
+    }
+}
+
+// Check if QR code is animated (multi-part)
+function isAnimatedQRCode(text) {
+    // Format: "index/total|data"
+    const parts = text.split('|');
+    if (parts.length < 2) return false;
+
+    const meta = parts[0];
+    const metaParts = meta.split('/');
+
+    if (metaParts.length !== 2) return false;
+
+    const index = parseInt(metaParts[0]);
+    const total = parseInt(metaParts[1]);
+
+    return !isNaN(index) && !isNaN(total) && index > 0 && total > 0 && index <= total;
+}
+
+// Process animated QR code parts
+function processAnimatedQR(text, result) {
+    const parts = text.split('|');
+    const meta = parts[0];
+    const metaParts = meta.split('/');
+
+    const index = parseInt(metaParts[0]);
+    const total = parseInt(metaParts[1]);
+    const data = parts.slice(1).join('|'); // Rejoin in case data contains |
+
+    // If we detect a new sequence (different total), reset
+    if (animatedQRTotal !== 0 && animatedQRTotal !== total) {
+        console.log('New animated sequence detected, resetting...');
+        resetAnimatedQR();
+    }
+
+    // Set total on first detection
+    if (animatedQRTotal === 0) {
+        animatedQRTotal = total;
+        showAnimatedQRProgress();
+    }
+
+    // Store this part if not already stored
+    if (!animatedQRParts[index]) {
+        animatedQRParts[index] = data;
+
+        // Flash effect for each new part
+        scannerBox.classList.add('success');
+        setTimeout(() => scannerBox.classList.remove('success'), 300);
+
+        // Short beep for each part
+        playSuccessSound();
+
+        // Update progress
+        updateAnimatedQRProgress();
+
+        console.log(`Animated QR: Got part ${index}/${total} (${Object.keys(animatedQRParts).length} collected)`);
+
+        // Check if we have all parts
+        if (Object.keys(animatedQRParts).length === total) {
+            assembleAnimatedQR();
+        }
+    }
+}
+
+// Reset animated QR tracking
+function resetAnimatedQR() {
+    animatedQRParts = {};
+    animatedQRTotal = 0;
+    animatedQRMetadata = null;
+    hideAnimatedQRProgress();
+}
+
+// Show animated QR progress indicator
+function showAnimatedQRProgress() {
+    // Check if progress element exists, if not create it
+    let progressContainer = document.getElementById('animatedQRProgress');
+    if (!progressContainer) {
+        progressContainer = document.createElement('div');
+        progressContainer.id = 'animatedQRProgress';
+        progressContainer.className = 'animated-qr-progress';
+        progressContainer.innerHTML = `
+            <div class="progress-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>Animated QR Code</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text">
+                <span id="animatedQRProgressText">0/${animatedQRTotal}</span>
+            </div>
+        `;
+        scannerBox.appendChild(progressContainer);
+    }
+}
+
+// Update animated QR progress
+function updateAnimatedQRProgress() {
+    const progressText = document.getElementById('animatedQRProgressText');
+    const progressFill = document.querySelector('.progress-fill');
+
+    if (progressText && progressFill) {
+        const collected = Object.keys(animatedQRParts).length;
+        progressText.textContent = `${collected}/${animatedQRTotal}`;
+
+        const percentage = (collected / animatedQRTotal) * 100;
+        progressFill.style.width = `${percentage}%`;
+    }
+}
+
+// Hide animated QR progress
+function hideAnimatedQRProgress() {
+    const progressContainer = document.getElementById('animatedQRProgress');
+    if (progressContainer) {
+        progressContainer.remove();
+    }
+}
+
+// Assemble all parts into complete data
+function assembleAnimatedQR() {
+    console.log('All parts collected! Assembling...');
+
+    // Combine all parts in order
+    let completeData = '';
+    for (let i = 1; i <= animatedQRTotal; i++) {
+        if (animatedQRParts[i]) {
+            completeData += animatedQRParts[i];
+        } else {
+            console.error(`Missing part ${i}/${animatedQRTotal}`);
+            showNotification(`Thiếu phần ${i}/${animatedQRTotal}. Vui lòng quét lại.`, 'error');
+            resetAnimatedQR();
+            return;
+        }
+    }
+
+    // Success! We have complete data
+    scannerBox.classList.add('success');
+    setTimeout(() => scannerBox.classList.remove('success'), 1000);
+
+    // Play longer success sound
+    playSuccessSound();
+    setTimeout(() => playSuccessSound(), 150);
+
+    // Vibrate pattern
+    if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200]);
+    }
+
+    // Add complete result
+    addResult(completeData, 'ANIMATED_QR', animatedQRTotal);
+
+    // Show success notification
+    showNotification(`✅ Hoàn thành! Đã ghép ${animatedQRTotal} phần QR code.`, 'success');
+
+    // Reset for next sequence
+    setTimeout(() => {
+        resetAnimatedQR();
+    }, 1000);
 }
 
 // Handle scan error (silent)
@@ -194,14 +378,15 @@ function onScanError(errorMessage) {
 }
 
 // Add result to list
-function addResult(text, format = 'QR_CODE') {
+function addResult(text, format = 'QR_CODE', parts = null) {
     const timestamp = new Date().toLocaleString('vi-VN');
 
     const result = {
         id: Date.now(),
         text: text,
         format: format,
-        timestamp: timestamp
+        timestamp: timestamp,
+        parts: parts // Number of parts if animated QR
     };
 
     // Check for duplicates
@@ -215,7 +400,9 @@ function addResult(text, format = 'QR_CODE') {
     saveResults();
     renderResults();
 
-    showNotification('Quét thành công!', 'success');
+    if (format !== 'ANIMATED_QR') {
+        showNotification('Quét thành công!', 'success');
+    }
 }
 
 // Render results
@@ -237,9 +424,9 @@ function renderResults() {
     }
 
     resultsList.innerHTML = scannedResults.map(result => `
-        <div class="result-item success" data-id="${result.id}">
+        <div class="result-item success ${result.format === 'ANIMATED_QR' ? 'animated-qr-result' : ''}" data-id="${result.id}">
             <div class="result-header">
-                <span class="result-type">
+                <span class="result-type ${result.format === 'ANIMATED_QR' ? 'animated-type' : ''}">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
@@ -247,6 +434,7 @@ function renderResults() {
                         <rect x="3" y="14" width="7" height="7"></rect>
                     </svg>
                     ${result.format}
+                    ${result.parts ? `<span class="parts-badge">${result.parts} parts</span>` : ''}
                 </span>
                 <span class="result-time">${result.timestamp}</span>
             </div>
