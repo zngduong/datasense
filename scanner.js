@@ -34,12 +34,29 @@ async function getCameras() {
     try {
         const devices = await Html5Qrcode.getCameras();
         if (devices && devices.length > 0) {
+            let backCameraIndex = -1;
+
             devices.forEach((device, index) => {
                 const option = document.createElement('option');
                 option.value = device.id;
                 option.text = device.label || `Camera ${index + 1}`;
                 cameraSelect.appendChild(option);
+
+                // Find back/rear camera (environment-facing camera)
+                const label = (device.label || '').toLowerCase();
+                if (label.includes('back') || label.includes('rear') || label.includes('environment')) {
+                    backCameraIndex = index;
+                }
             });
+
+            // If we found a back camera, select it as default
+            // Otherwise, on mobile, the last camera is usually the back camera
+            if (backCameraIndex !== -1) {
+                cameraSelect.selectedIndex = backCameraIndex;
+            } else if (devices.length > 1) {
+                // On most mobile devices, back camera is the last one
+                cameraSelect.selectedIndex = devices.length - 1;
+            }
 
             if (devices.length > 1) {
                 cameraSelector.style.display = 'block';
@@ -62,8 +79,15 @@ async function startScanning() {
         // Hide instruction
         scannerInstruction.classList.add('hidden');
 
-        // Get selected camera or use default
-        const cameraId = cameraSelect.value || { facingMode: "environment" };
+        // Get selected camera or use back camera (environment-facing)
+        // Always prefer back camera on mobile devices
+        let cameraId;
+        if (cameraSelect.value) {
+            cameraId = cameraSelect.value;
+        } else {
+            // Use environment-facing (back) camera as default
+            cameraId = { facingMode: "environment" };
+        }
 
         // Initialize scanner
         html5QrcodeScanner = new Html5Qrcode("reader");
@@ -74,12 +98,23 @@ async function startScanning() {
             aspectRatio: 1.0,
         };
 
-        await html5QrcodeScanner.start(
-            cameraId,
-            config,
-            onScanSuccess,
-            onScanError
-        );
+        try {
+            await html5QrcodeScanner.start(
+                cameraId,
+                config,
+                onScanSuccess,
+                onScanError
+            );
+        } catch (err) {
+            // If environment camera fails, try with any available camera
+            console.warn('Failed to start with environment camera, trying default:', err);
+            await html5QrcodeScanner.start(
+                { facingMode: "user" }, // Fallback to front camera
+                config,
+                onScanSuccess,
+                onScanError
+            );
+        }
 
         isScanning = true;
         startButton.style.display = 'none';
