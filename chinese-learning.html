@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Học Hán tự tiếng Trung online - Flashcard, luyện viết nét và bộ thủ">
+    <title>Học Hán Tự - DataSense</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="chinese-learning-styles.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-background">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <a href="index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="10" fill="url(#gradient)"/>
+                        <circle cx="20" cy="20" r="12" fill="white" opacity="0.2"/>
+                        <circle cx="20" cy="20" r="8" fill="white" opacity="0.3"/>
+                        <path d="M20 10L28 20L20 30L12 20L20 10Z" fill="white"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#667eea"/>
+                                <stop offset="100%" stop-color="#764ba2"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>DataSense</span>
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Trang chủ</a></li>
+                <li><a href="index.html#features" class="nav-link">Tính năng</a></li>
+                <li><a href="scanner.html" class="nav-link">QR Scanner</a></li>
+                <li><a href="chinese-learning.html" class="nav-link active">Học Hán Tự</a></li>
+                <li><a href="index.html#contact" class="btn btn-primary nav-cta">Liên hệ</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="cl-hero">
+        <div class="container">
+            <div class="cl-hero-content">
+                <div class="cl-hero-badge">汉字 • Hán Tự</div>
+                <h1 class="cl-hero-title">
+                    Học <span class="gradient-text">Hán Tự</span> Tiếng Trung
+                </h1>
+                <p class="cl-hero-desc">
+                    Khám phá Hán tự qua flashcard, bộ thủ và luyện viết nét tương tác.
+                    Lưu tiến trình học tự động trên trình duyệt của bạn.
+                </p>
+                <div class="cl-stats-bar">
+                    <div class="cl-stat-item">
+                        <span class="cl-stat-num" id="stat-total-learned">0</span>
+                        <span class="cl-stat-label">Đã học</span>
+                    </div>
+                    <div class="cl-stat-divider"></div>
+                    <div class="cl-stat-item">
+                        <span class="cl-stat-num" id="stat-mastered">0</span>
+                        <span class="cl-stat-label">Thành thạo</span>
+                    </div>
+                    <div class="cl-stat-divider"></div>
+                    <div class="cl-stat-item">
+                        <span class="cl-stat-num" id="stat-accuracy">0%</span>
+                        <span class="cl-stat-label">Độ chính xác</span>
+                    </div>
+                    <div class="cl-stat-divider"></div>
+                    <div class="cl-stat-item">
+                        <span class="cl-stat-num" id="stat-streak">0</span>
+                        <span class="cl-stat-label">Ngày liên tiếp</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Controls -->
+    <section class="cl-controls-section">
+        <div class="container">
+            <!-- Mode Toggle -->
+            <div class="cl-mode-toggle">
+                <button class="cl-mode-btn active" data-mode="flashcard">
+                    <span class="cl-mode-icon">🃏</span> Flashcard
+                </button>
+                <button class="cl-mode-btn" data-mode="radicals">
+                    <span class="cl-mode-icon">📚</span> Bộ Thủ
+                </button>
+                <button class="cl-mode-btn" data-mode="writing">
+                    <span class="cl-mode-icon">✏️</span> Luyện Viết
+                </button>
+                <button class="cl-mode-btn" data-mode="quiz">
+                    <span class="cl-mode-icon">🧠</span> Kiểm Tra
+                </button>
+            </div>
+
+            <!-- Filter & Search (Flashcard + Quiz only) -->
+            <div class="cl-filter-bar" id="filter-bar">
+                <div class="cl-hsk-tabs">
+                    <button class="cl-hsk-tab active" data-hsk="all">Tất cả</button>
+                    <button class="cl-hsk-tab" data-hsk="1">HSK 1</button>
+                    <button class="cl-hsk-tab" data-hsk="2">HSK 2</button>
+                    <button class="cl-hsk-tab" data-hsk="3">HSK 3</button>
+                </div>
+                <div class="cl-search-wrapper">
+                    <input type="text" class="cl-search-input" id="search-input" placeholder="Tìm chữ, pinyin, nghĩa...">
+                    <span class="cl-search-icon">🔍</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FLASHCARD MODE ===== -->
+    <section class="cl-area" id="mode-flashcard">
+        <div class="container">
+            <div class="cl-flashcard-layout">
+                <!-- Card -->
+                <div class="cl-flashcard-wrapper">
+                    <div class="cl-flashcard" id="flashcard" onclick="flipCard()">
+                        <div class="cl-card-front">
+                            <div class="cl-hsk-badge" id="fc-hsk-badge">HSK 1</div>
+                            <div class="cl-char-display" id="fc-char">你</div>
+                            <div class="cl-tap-hint">Nhấn để lật thẻ</div>
+                        </div>
+                        <div class="cl-card-back">
+                            <div class="cl-pinyin" id="fc-pinyin">nǐ</div>
+                            <div class="cl-meaning" id="fc-meaning">bạn, anh, chị</div>
+                            <div class="cl-example" id="fc-example">你好！(Xin chào!)</div>
+                            <div class="cl-stroke-container" id="fc-stroke-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar: counter + actions -->
+                <div class="cl-flashcard-sidebar">
+                    <div class="cl-card-counter">
+                        <span id="fc-current">1</span> / <span id="fc-total">60</span>
+                    </div>
+                    <div class="cl-progress-bar-wrap">
+                        <div class="cl-progress-bar" id="fc-progress-bar" style="width: 0%"></div>
+                    </div>
+
+                    <div class="cl-fc-actions">
+                        <button class="btn btn-secondary cl-fc-btn" id="btn-prev" onclick="prevCard()">← Trước</button>
+                        <button class="btn btn-primary cl-fc-btn" onclick="flipCard()">Lật thẻ</button>
+                        <button class="btn btn-secondary cl-fc-btn" id="btn-next" onclick="nextCard()">Sau →</button>
+                    </div>
+
+                    <div class="cl-know-btns" id="know-btns" style="display:none;">
+                        <button class="cl-know-btn cl-know-yes" onclick="markCard(true)">
+                            ✓ Đã biết
+                        </button>
+                        <button class="cl-know-btn cl-know-no" onclick="markCard(false)">
+                            ✗ Cần ôn lại
+                        </button>
+                    </div>
+
+                    <button class="cl-shuffle-btn" onclick="shuffleCards()">
+                        🔀 Xáo trộn thẻ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== RADICALS MODE ===== -->
+    <section class="cl-area" id="mode-radicals" style="display:none;">
+        <div class="container">
+            <div class="cl-section-header">
+                <h2 class="cl-section-title">Bộ Thủ Thường Dùng</h2>
+                <p class="cl-section-desc">Nhấn vào bộ thủ để xem hoạt ảnh nét và luyện viết</p>
+            </div>
+            <div id="radicals-container"></div>
+        </div>
+    </section>
+
+    <!-- ===== WRITING MODE ===== -->
+    <section class="cl-area" id="mode-writing" style="display:none;">
+        <div class="container">
+            <div class="cl-writing-layout">
+                <div class="cl-writing-panel">
+                    <div class="cl-section-header">
+                        <h2 class="cl-section-title">Luyện Viết Nét</h2>
+                        <p class="cl-section-desc">Vẽ từng nét theo thứ tự đúng</p>
+                    </div>
+
+                    <div class="cl-writing-char-selector">
+                        <label>Chọn chữ để luyện:</label>
+                        <select id="writing-char-select" onchange="loadWritingChar()"></select>
+                    </div>
+
+                    <div class="cl-writing-canvas-wrap">
+                        <div id="writing-canvas" class="cl-writing-canvas"></div>
+                        <div class="cl-writing-info">
+                            <span class="cl-writing-char-label" id="writing-char-label">你</span>
+                            <span class="cl-writing-pinyin" id="writing-pinyin">nǐ</span>
+                            <span class="cl-writing-meaning" id="writing-meaning">bạn, anh, chị</span>
+                        </div>
+                    </div>
+
+                    <div class="cl-writing-controls">
+                        <button class="btn btn-secondary" onclick="animateWriting()">▶ Xem hoạt ảnh</button>
+                        <button class="btn btn-primary" onclick="startWritingQuiz()">✏️ Luyện viết</button>
+                        <button class="btn btn-secondary" onclick="resetWriting()">↺ Làm lại</button>
+                    </div>
+
+                    <div class="cl-writing-feedback" id="writing-feedback"></div>
+                </div>
+
+                <div class="cl-writing-char-list">
+                    <h3>Chữ gợi ý</h3>
+                    <div id="writing-char-grid"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== QUIZ MODE ===== -->
+    <section class="cl-area" id="mode-quiz" style="display:none;">
+        <div class="container">
+            <div class="cl-quiz-layout">
+                <div class="cl-quiz-score-bar">
+                    <div class="cl-quiz-score-item">
+                        <span class="cl-quiz-score-num" id="quiz-correct">0</span>
+                        <span class="cl-quiz-score-label">Đúng</span>
+                    </div>
+                    <div class="cl-quiz-score-item">
+                        <span class="cl-quiz-score-num" id="quiz-wrong">0</span>
+                        <span class="cl-quiz-score-label">Sai</span>
+                    </div>
+                    <div class="cl-quiz-score-item">
+                        <span class="cl-quiz-score-num" id="quiz-accuracy-display">—</span>
+                        <span class="cl-quiz-score-label">Chính xác</span>
+                    </div>
+                </div>
+
+                <div class="cl-quiz-card" id="quiz-card">
+                    <div class="cl-quiz-hsk-badge" id="quiz-hsk-badge">HSK 1</div>
+                    <div class="cl-quiz-char" id="quiz-char">你</div>
+                    <div class="cl-quiz-pinyin" id="quiz-pinyin" style="display:none;"></div>
+                    <p class="cl-quiz-instruction">Chọn nghĩa đúng của chữ trên:</p>
+                </div>
+
+                <div class="cl-quiz-options" id="quiz-options"></div>
+
+                <div class="cl-quiz-result" id="quiz-result" style="display:none;"></div>
+
+                <button class="btn btn-primary cl-quiz-next-btn" id="quiz-next-btn" onclick="nextQuestion()" style="display:none;">
+                    Câu tiếp theo →
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <rect width="32" height="32" rx="8" fill="url(#footerGradient)"/>
+                            <path d="M16 8L24 16L16 24L8 16L16 8Z" fill="white"/>
+                            <defs>
+                                <linearGradient id="footerGradient" x1="0" y1="0" x2="32" y2="32">
+                                    <stop offset="0%" stop-color="#667eea"/>
+                                    <stop offset="100%" stop-color="#764ba2"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>DataSense</span>
+                    </div>
+                    <p>Nền tảng kết nối API thông minh cho doanh nghiệp hiện đại</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Sản phẩm</h4>
+                    <ul>
+                        <li><a href="index.html#features">Tính năng</a></li>
+                        <li><a href="index.html#pricing">Giá cả</a></li>
+                        <li><a href="scanner.html">QR Scanner</a></li>
+                        <li><a href="chinese-learning.html">Học Hán Tự</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Công ty</h4>
+                    <ul>
+                        <li><a href="#">Về chúng tôi</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Hỗ trợ</h4>
+                    <ul>
+                        <li><a href="#">Trung tâm trợ giúp</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Status</a></li>
+                        <li><a href="#">Điều khoản</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 DataSense. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#">Twitter</a>
+                    <a href="#">GitHub</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+    <script src="script.js"></script>
+    <script src="chinese-learning.js"></script>
+</body>
+</html>
