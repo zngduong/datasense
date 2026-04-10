@@ -513,13 +513,15 @@ function toggleBlindMode() {
   const icon = document.getElementById('blind-mode-icon');
   const label = document.getElementById('blind-mode-label');
   if (state.blindMode) {
-    btn.classList.add('blind-active');
+    btn.classList.remove('btn-secondary');
+    btn.classList.add('btn-primary');
     icon.textContent = '🙈';
-    label.textContent = 'Chế độ mù (đang bật)';
+    label.textContent = 'Không bóng mờ';
   } else {
-    btn.classList.remove('blind-active');
+    btn.classList.remove('btn-primary');
+    btn.classList.add('btn-secondary');
     icon.textContent = '👁';
-    label.textContent = 'Hiện bóng mờ';
+    label.textContent = 'Không bóng mờ';
   }
   // Reload canvas with new settings
   if (state.writingChar) createWritingCanvas(state.writingChar.char);
