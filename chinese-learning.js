@@ -123,6 +123,7 @@ const state = {
   writingChar: null,
   hanziWriter: null,
   modalWriter: null,
+  blindMode: false,      // writing: ẩn bóng mờ
 };
 
 // localStorage helpers
@@ -483,24 +484,45 @@ function loadWritingCharByChar(char) {
   fb.className = 'cl-writing-feedback';
 
   // Create hanzi-writer
+  createWritingCanvas(c.char);
+}
+
+function createWritingCanvas(char) {
   const canvas = document.getElementById('writing-canvas');
   canvas.innerHTML = '';
-  if (typeof HanziWriter !== 'undefined') {
-    try {
-      state.hanziWriter = HanziWriter.create(canvas, c.char, {
-        width: 280,
-        height: 280,
-        padding: 20,
-        strokeColor: '#667eea',
-        outlineColor: '#e2e8f0',
-        showCharacter: true,
-        showOutline: true,
-        drawingColor: '#1e293b',
-        drawingWidth: 4,
-        highlightColor: '#764ba2',
-      });
-    } catch (_) {}
+  if (typeof HanziWriter === 'undefined') return;
+  try {
+    state.hanziWriter = HanziWriter.create(canvas, char, {
+      width: 280,
+      height: 280,
+      padding: 20,
+      strokeColor: '#667eea',
+      outlineColor: state.blindMode ? 'rgba(0,0,0,0)' : '#e2e8f0',
+      showCharacter: !state.blindMode,
+      showOutline: !state.blindMode,
+      drawingColor: '#1e293b',
+      drawingWidth: 4,
+      highlightColor: '#764ba2',
+    });
+  } catch (_) {}
+}
+
+function toggleBlindMode() {
+  state.blindMode = !state.blindMode;
+  const btn = document.getElementById('blind-mode-btn');
+  const icon = document.getElementById('blind-mode-icon');
+  const label = document.getElementById('blind-mode-label');
+  if (state.blindMode) {
+    btn.classList.add('blind-active');
+    icon.textContent = '🙈';
+    label.textContent = 'Chế độ mù (đang bật)';
+  } else {
+    btn.classList.remove('blind-active');
+    icon.textContent = '👁';
+    label.textContent = 'Hiện bóng mờ';
   }
+  // Reload canvas with new settings
+  if (state.writingChar) createWritingCanvas(state.writingChar.char);
 }
 
 function animateWriting() {
