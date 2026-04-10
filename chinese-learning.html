@@ -211,17 +211,13 @@
                         </div>
                     </div>
 
-                    <div class="cl-writing-mode-toggle">
-                        <button class="cl-blind-toggle" id="blind-mode-btn" onclick="toggleBlindMode()">
-                            <span id="blind-mode-icon">👁</span>
-                            <span id="blind-mode-label">Hiện bóng mờ</span>
-                        </button>
-                    </div>
-
                     <div class="cl-writing-controls">
                         <button class="btn btn-secondary" onclick="animateWriting()">▶ Xem hoạt ảnh</button>
                         <button class="btn btn-primary" onclick="startWritingQuiz()">✏️ Luyện viết</button>
                         <button class="btn btn-secondary" onclick="resetWriting()">↺ Làm lại</button>
+                        <button class="btn btn-secondary" id="blind-mode-btn" onclick="toggleBlindMode()">
+                            <span id="blind-mode-icon">👁</span> <span id="blind-mode-label">Không bóng mờ</span>
+                        </button>
                     </div>
 
                     <div class="cl-writing-feedback" id="writing-feedback"></div>

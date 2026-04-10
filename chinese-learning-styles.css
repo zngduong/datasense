@@ -87,22 +87,29 @@
 
 /* ---- Controls Section ---- */
 .cl-controls-section {
-    padding: 12px 0 20px;
+    padding: 12px 0 16px;
 }
 
 .cl-mode-toggle {
     display: flex;
     gap: 6px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    padding: 0 16px 4px;
+    margin-bottom: 12px;
+}
+
+.cl-mode-toggle::-webkit-scrollbar {
+    display: none;
 }
 
 .cl-mode-btn {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
+    gap: 5px;
+    padding: 7px 14px;
     border: 1.5px solid #e2e8f0;
     border-radius: 100px;
     background: white;
@@ -111,6 +118,8 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.25s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .cl-mode-btn:hover {
@@ -126,33 +135,42 @@
 }
 
 .cl-mode-icon {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 /* Filter Bar */
 .cl-filter-bar {
     display: flex;
     align-items: center;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    padding: 0 16px;
+}
+
+.cl-filter-bar::-webkit-scrollbar {
+    display: none;
 }
 
 .cl-hsk-tabs {
     display: flex;
-    gap: 6px;
+    gap: 5px;
+    flex-shrink: 0;
 }
 
 .cl-hsk-tab {
-    padding: 7px 18px;
+    padding: 6px 14px;
     border: 1.5px solid #e2e8f0;
     border-radius: 100px;
     background: white;
     color: var(--text-light);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
 .cl-hsk-tab:hover {
@@ -170,6 +188,7 @@
     position: relative;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .cl-search-input {
@@ -179,7 +198,7 @@
     font-size: 14px;
     color: var(--text-dark);
     background: white;
-    width: 220px;
+    width: 160px;
     outline: none;
     transition: border-color 0.2s;
     font-family: inherit;
@@ -703,39 +722,6 @@
     color: var(--text-light);
 }
 
-.cl-writing-mode-toggle {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 12px;
-}
-
-.cl-blind-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 20px;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 100px;
-    background: white;
-    color: var(--text-light);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    font-family: inherit;
-}
-
-.cl-blind-toggle:hover {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-}
-
-.cl-blind-toggle.blind-active {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border-color: transparent;
-    color: white;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
-}
 
 .cl-writing-controls {
     display: flex;
