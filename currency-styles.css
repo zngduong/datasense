@@ -1,0 +1,332 @@
+/* ==========================================================
+   Currency Converter Page — "Bảng kê ngoại tệ"
+   Self-contained token set (prefixed --cur-*) so it never
+   collides with the site-wide variables in styles.css.
+   ========================================================== */
+:root {
+    --cur-ink: #11161D;
+    --cur-ink-soft: #1B222C;
+    --cur-lcd: #FFC15E;
+    --cur-lcd-dim: #8A6A38;
+    --cur-paper: #EDF0F3;
+    --cur-card: #FFFFFF;
+    --cur-rule: #DDE3E9;
+    --cur-text: #151A21;
+    --cur-muted: #77828F;
+    --cur-focus: #2C5AA0;
+    --cur-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --cur-header-height: 82px;
+}
+
+body.currency-page {
+    background: var(--cur-paper);
+}
+
+/* ---------------------------- Sticky total bar --------------------------- */
+.currency-topbar {
+    margin-top: var(--cur-header-height);
+    position: sticky;
+    top: var(--cur-header-height);
+    background: var(--cur-ink);
+    border-bottom: 1px solid var(--cur-ink-soft);
+    box-shadow: 0 8px 24px rgba(17, 22, 29, 0.2);
+    z-index: 900;
+}
+
+.currency-topbar-inner {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 12px 16px 14px;
+    position: relative;
+}
+
+.topbar-scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.16;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.1) 0px,
+        rgba(255, 255, 255, 0.1) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+}
+
+.topbar-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    position: relative;
+}
+
+.topbar-title-group {
+    flex: 1;
+    min-width: 0;
+}
+
+.topbar-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #E7EBF0;
+    letter-spacing: -0.01em;
+}
+
+.topbar-sub {
+    font-family: var(--cur-mono);
+    font-size: 10.5px;
+    color: var(--cur-lcd-dim);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-dark {
+    border: 1px solid #2C3542;
+    background: var(--cur-ink-soft);
+    color: #C6CEDA;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-dark:hover {
+    background: #263040;
+}
+
+.btn-dark:active {
+    background: #263040;
+}
+
+.btn-dark:focus-visible {
+    outline: 2px solid var(--cur-lcd);
+    outline-offset: 2px;
+}
+
+.topbar-total-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 7px;
+    margin-top: 7px;
+    position: relative;
+}
+
+.topbar-total-label {
+    font-family: var(--cur-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--cur-lcd-dim);
+    text-transform: uppercase;
+}
+
+.topbar-total-value {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.topbar-total-number {
+    font-family: var(--cur-mono);
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--cur-lcd);
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.05;
+    text-shadow: 0 0 18px rgba(255, 193, 94, 0.28);
+}
+
+.topbar-total-currency {
+    font-family: var(--cur-mono);
+    font-size: 16px;
+    color: var(--cur-lcd-dim);
+}
+
+/* ------------------------------ Main content ------------------------------ */
+.currency-section {
+    padding: 20px 0 60px;
+    min-height: 60vh;
+}
+
+.currency-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 14px;
+}
+
+.currency-hint {
+    font-size: 11.5px;
+    color: var(--cur-muted);
+    line-height: 1.5;
+    margin: 14px 2px 0;
+}
+
+/* ------------------------------ Currency card ------------------------------ */
+.cur-card {
+    background: var(--cur-card);
+    border: 1px solid var(--cur-rule);
+    border-radius: 14px;
+    padding: 13px 15px 6px;
+    margin-bottom: 10px;
+}
+
+.cur-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid var(--cur-rule);
+}
+
+.cur-flag {
+    font-size: 21px;
+    line-height: 1;
+}
+
+.cur-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.cur-code {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--cur-text);
+}
+
+.cur-name {
+    font-size: 11px;
+    color: var(--cur-muted);
+    margin-top: 1px;
+}
+
+.cur-subtotal {
+    font-family: var(--cur-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cur-muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.cur-subtotal.active {
+    color: var(--cur-text);
+}
+
+/* ------------------------------ Tier row ------------------------------ */
+.tier-row {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 12px;
+    padding: 11px 0;
+}
+
+.tier-row + .tier-row {
+    border-top: 1px dashed var(--cur-rule);
+}
+
+.tier-label-col {
+    min-width: 0;
+}
+
+.tier-label {
+    font-family: var(--cur-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--cur-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tier-label.active {
+    color: var(--cur-text);
+}
+
+.tier-rate {
+    font-family: var(--cur-mono);
+    font-size: 11px;
+    color: var(--cur-muted);
+    margin-top: 3px;
+}
+
+.tier-input-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    border-bottom: 1.5px solid var(--cur-rule);
+    padding-bottom: 3px;
+}
+
+.tier-input-wrap.active {
+    border-bottom-color: var(--cur-focus);
+}
+
+.tier-currency-code {
+    font-family: var(--cur-mono);
+    font-size: 12px;
+    color: var(--cur-muted);
+}
+
+.amt {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    text-align: right;
+    font-family: var(--cur-mono);
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--cur-muted);
+    padding: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.amt.active {
+    color: var(--cur-text);
+}
+
+.amt::placeholder {
+    color: var(--cur-muted);
+    opacity: 0.55;
+}
+
+.amt:focus-visible {
+    outline: none;
+}
+
+.tier-converted {
+    font-family: var(--cur-mono);
+    font-size: 12px;
+    text-align: right;
+    margin-top: 4px;
+    color: transparent;
+    font-variant-numeric: tabular-nums;
+}
+
+.tier-converted.active {
+    color: var(--cur-text);
+}
+
+.currency-container input:focus-visible {
+    outline: 2px solid var(--cur-focus);
+    outline-offset: 3px;
+    border-radius: 3px;
+}
+
+/* ------------------------------ Responsive ------------------------------ */
+@media (max-width: 480px) {
+    .topbar-total-number {
+        font-size: 26px;
+    }
+}
